@@ -5,7 +5,11 @@ export default {
     fontFamily: {
       kumbh: ["Kumbh Sans", "sans-serif"],
     },
-    extend: {},
+    extend: {
+      screens: {
+        tab: "920px",
+      },
+    },
   },
   plugins: [],
 };

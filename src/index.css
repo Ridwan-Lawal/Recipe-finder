@@ -7,3 +7,7 @@
 .nav-icon {
   @apply text-2xl text-white;
 }
+
+.foodcard-icons {
+  @apply hover:scale-110 cursor-pointer transition-all;
+}
