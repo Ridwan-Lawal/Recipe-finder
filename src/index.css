@@ -11,3 +11,15 @@
 .foodcard-icons {
   @apply hover:scale-110 cursor-pointer transition-all;
 }
+
+form {
+  @apply bg-blue-500 w-[100%]   flex gap-4 items-center p-2.5 rounded-md;
+}
+
+.remove-btn {
+  @apply text-lg  gap-6 text-blue-800 hover:text-red-600 font-semibold;
+}
+
+.no-data-text {
+  @apply text-2xl font-semibold text-gray-700 text-center mt-32;
+}

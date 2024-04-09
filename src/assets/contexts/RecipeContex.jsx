@@ -1,16 +1,57 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 const initialValue = {
   foodSearch: "",
-  status: "loading",
+  status: null,
+  foodData: {},
+  bookmarkData: [],
+  favouriteData: [],
+  errorMessage: "",
 };
 
 function reducer(state, action) {
   switch (action.type) {
     case "homepage/searchChange":
       return { ...state, foodSearch: action.payload };
+
+    case "data/loading":
+      return { ...state, status: "loading" };
+
+    case "data/ready":
+      return { ...state, foodData: action.payload, status: "ready" };
+
+    case "data/failed":
+      return { ...state, status: "error", errorMessage: action.payload };
+
+    case "favourite/add":
+      return {
+        ...state,
+        favouriteData: [...state.favouriteData, action.payload],
+      };
+
+    case "favourite/delete":
+      return {
+        ...state,
+        favouriteData: state.favouriteData.filter(
+          (food) => food.idMeal !== action.payload
+        ),
+      };
+
+    case "bookmark/add":
+      return {
+        ...state,
+        bookmarkData: [...state.bookmarkData, action.payload],
+      };
+
+    case "bookmark/delete":
+      return {
+        ...state,
+        bookmarkData: state.bookmarkData.filter(
+          (food) => food.idMeal !== action.payload
+        ),
+      };
 
     default:
       throw new Error("unknown error");
@@ -22,18 +63,50 @@ const RecipeContext = createContext();
 function RecipeProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialValue);
 
-  const { foodSearch } = state;
+  const {
+    foodSearch,
+    foodData,
+    favouriteData,
+    bookmarkData,
+    errorMessage,
+    status,
+  } = state;
 
-  useEffect(function () {
+  async function getFoodRecipes() {
+    dispatch({ type: "data/loading" });
     try {
-        await fetch()
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/search.php?s=${foodSearch}`
+      );
+
+      if (!res.ok) throw new Error("Something went wrong getting recipes!");
+      const data = await res.json();
+      dispatch({ type: "data/ready", payload: data });
+      if (!data.meals)
+        throw new Error(
+          "Couldn't find the food you were trying to look for! ☹"
+        );
+      console.log(data);
     } catch (err) {
+      if (err.name === "AbortError") return;
       console.log(err.message);
+      dispatch({ type: "data/failed", payload: err.message });
     }
-  }, []);
+  }
 
   return (
-    <RecipeContext.Provider value={{ foodSearch, dispatch }}>
+    <RecipeContext.Provider
+      value={{
+        foodSearch,
+        dispatch,
+        foodData,
+        favouriteData,
+        bookmarkData,
+        getFoodRecipes,
+        errorMessage,
+        status,
+      }}
+    >
       {children}
     </RecipeContext.Provider>
   );

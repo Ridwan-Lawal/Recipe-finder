@@ -1,23 +1,30 @@
-import { PiBookmarkBold, PiHeartBold } from "react-icons/pi";
+/* eslint-disable react/prop-types */
 
-function FoodHeader() {
+import AddDeleteFood from "../AddDeleteFood";
+
+function FoodHeader({ selectedFood }) {
   return (
-    <div className="px-8">
-      <section className="bg-red-500 flex justify-center p-4">
-        <img src="/src/assets/Lime.png" alt="" className="w-[300px]" />
+    <div className="px-8 md:flex gap-20">
+      <section className="bg-red-500 flex justify-center md:w-[50%]">
+        <img
+          src={selectedFood?.strMealThumb}
+          alt=""
+          className="w-full h-72 object-cover"
+        />
       </section>
 
-      <section className="flex justify-between mt-4">
+      <section className="flex justify-between mt-4 md:w-[50%]">
         <div>
-          <h1 className="text-4xl sm:text-5xl font-semibold text-gray-900">
-            Sushi Rice
+          <h1 className="text-[32px] sm:text-[33px] font-semibold text-gray-900">
+            {selectedFood?.strMeal}
           </h1>
-          <p className="text-2xl text-gray-500 mt-3">Epicurious</p>
+          <p className="text-2xl text-gray-500 mt-3">
+            {selectedFood?.strCategory}
+          </p>
         </div>
 
         <div className="flex gap-8 mt-5">
-          <PiHeartBold className="foodcard-icons text-3xl" />
-          <PiBookmarkBold className="foodcard-icons text-3xl" />
+          <AddDeleteFood meal={selectedFood} font="text-3xl" />
         </div>
       </section>
     </div>
