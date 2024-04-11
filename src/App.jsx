@@ -6,14 +6,6 @@ import Bookmark from "./pages/Bookmark";
 import PageNotFound from "./pages/PageNotFound";
 import { RecipeProvider } from "./assets/contexts/RecipeContex";
 
-/*
-
-
--store the entire app data in the local storage.
-
-
-*/
-
 function App() {
   return (
     <div className="font-kumbh pb-14">

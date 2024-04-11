@@ -31,12 +31,12 @@ function Recipe() {
         <button onClick={() => navigate(-1)}>
           <PiArrowLeftBold className="text-[26px] text-white font-bold" />
         </button>
-        <p
+        <div
           onClick={() => navigate("/")}
           className="flex text-2xl text-white gap-4 py-3 px-4 font-medium cursor-pointer "
         >
           <NavLogo />
-        </p>
+        </div>
       </section>
 
       <div className="max-w-6xl mx-auto">

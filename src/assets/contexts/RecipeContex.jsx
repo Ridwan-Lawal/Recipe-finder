@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 const initialValue = {
   foodSearch: "",
@@ -53,6 +53,12 @@ function reducer(state, action) {
         ),
       };
 
+    case "search/submit":
+      return { ...state, foodSearch: "" };
+
+    case "storage/data":
+      return action.payload;
+
     default:
       throw new Error("unknown error");
   }
@@ -89,10 +95,29 @@ function RecipeProvider({ children }) {
       console.log(data);
     } catch (err) {
       if (err.name === "AbortError") return;
-      console.log(err.message);
+
       dispatch({ type: "data/failed", payload: err.message });
     }
   }
+
+  // effect for storing data into local storage
+  useEffect(
+    function () {
+      if (state !== initialValue) {
+        localStorage.setItem("recipeAppState", JSON.stringify(state));
+      }
+    },
+    [state]
+  );
+
+  function getData() {
+    const storedData = JSON.parse(localStorage.getItem("recipeAppState"));
+    if (storedData) dispatch({ type: "storage/data", payload: storedData });
+  }
+
+  useEffect(function () {
+    getData();
+  }, []);
 
   return (
     <RecipeContext.Provider

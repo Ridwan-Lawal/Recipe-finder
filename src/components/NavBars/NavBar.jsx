@@ -2,12 +2,17 @@
 import { PiMagnifyingGlassBold } from "react-icons/pi";
 import NavIcons from "./NavIcons";
 import NavLogo from "./NavLogo";
+import { useRecipe } from "../../assets/contexts/RecipeContex";
 
-function NavBar({ value, onChange, searchRecipes }) {
+function NavBar({ value, onChange, searchRecipes, onClick }) {
+  const { dispatch } = useRecipe();
+
   function handleSubmit(e) {
     e.preventDefault();
     if (!value) return;
     searchRecipes();
+    dispatch({ type: "search/submit" });
+    onClick();
   }
 
   return (

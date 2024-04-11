@@ -9,7 +9,7 @@ function NavIcons() {
   const { favouriteData, bookmarkData } = useRecipe();
 
   return (
-    <div className="flex gap-5  justify-between border">
+    <div className="flex gap-5  justify-between ">
       <PageIconCount
         onClick={() => navigate("/favourites")}
         foodNo={favouriteData.length}
