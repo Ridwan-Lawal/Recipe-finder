@@ -13,7 +13,7 @@ function Ingredients({ selectedFood }) {
   }
 
   return (
-    <div className="mt-4 sm:w-[45%] border">
+    <div className="mt-4 sm:w-[45%] ">
       <div className="flex justify-end">
         <Button
           paddingX="px-2.5 mt-10"

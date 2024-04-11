@@ -1,6 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
-import { createContext, useContext, useEffect, useReducer } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+} from "react";
 
 const initialValue = {
   foodSearch: "",
@@ -78,7 +85,7 @@ function RecipeProvider({ children }) {
     status,
   } = state;
 
-  async function getFoodRecipes() {
+  const getFoodRecipes = useCallback(async function getFoodRecipes() {
     dispatch({ type: "data/loading" });
     try {
       const res = await fetch(
@@ -98,7 +105,7 @@ function RecipeProvider({ children }) {
 
       dispatch({ type: "data/failed", payload: err.message });
     }
-  }
+  });
 
   // effect for storing data into local storage
   useEffect(
@@ -119,21 +126,30 @@ function RecipeProvider({ children }) {
     getData();
   }, []);
 
+  const value = useMemo(() => {
+    return {
+      foodSearch,
+      dispatch,
+      foodData,
+      favouriteData,
+      bookmarkData,
+      getFoodRecipes,
+      errorMessage,
+      status,
+    };
+  }, [
+    foodSearch,
+    dispatch,
+    foodData,
+    favouriteData,
+    bookmarkData,
+    errorMessage,
+    status,
+    getFoodRecipes,
+  ]);
+
   return (
-    <RecipeContext.Provider
-      value={{
-        foodSearch,
-        dispatch,
-        foodData,
-        favouriteData,
-        bookmarkData,
-        getFoodRecipes,
-        errorMessage,
-        status,
-      }}
-    >
-      {children}
-    </RecipeContext.Provider>
+    <RecipeContext.Provider value={value}>{children}</RecipeContext.Provider>
   );
 }
 
